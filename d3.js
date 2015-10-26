@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.5.6.1"
+    version: "3.5.7-SNAPSHOT"
   };
   var d3_arraySlice = [].slice, d3_array = function(list) {
     return d3_arraySlice.call(list);
@@ -843,20 +843,20 @@
 
     function sizeFor(v) {
       if (v.size) {
-        return v.length;
-      } else {
         return v.size;
+      } else {
+        return v.length;
       }
     }
 
     function indexerForValue(v) {
       if (v.get) {
         return function(i) {
-          v.get(i);
+          return v.get(i);
         }
       } else {
         return function(i) {
-          v[i];
+          return v[i];
         }
       }
     }
