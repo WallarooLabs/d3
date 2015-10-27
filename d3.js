@@ -8105,13 +8105,36 @@
   }
   function d3_svg_line(projection) {
     var x = d3_geom_pointX, y = d3_geom_pointY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, tension = .7;
+
+    function sizeFor(v) {
+      if (v.size) {
+        return v.size;
+      } else {
+        return v.length;
+      }
+    }
+
+    function indexerForValue(v) {
+      if (v.get) {
+        return function(i) {
+          return v.get(i);
+        }
+      } else {
+        return function(i) {
+          return v[i];
+        }
+      }
+    }
+
     function line(data) {
-      var segments = [], points = [], i = -1, n = data.length, d, fx = d3_functor(x), fy = d3_functor(y);
+      var indexerForData = indexerForValue(data);
+      var segments = [], points = [], i = -1, n = sizeFor(data), d, fx = d3_functor(x), fy = d3_functor(y);
       function segment() {
         segments.push("M", interpolate(projection(points), tension));
       }
+
       while (++i < n) {
-        if (defined.call(this, d = data[i], i)) {
+        if (defined.call(this, d = indexerForData(i), i)) {
           points.push([ +fx.call(this, d, i), +fy.call(this, d, i) ]);
         } else if (points.length) {
           segment();
